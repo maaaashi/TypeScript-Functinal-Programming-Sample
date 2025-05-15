@@ -14,7 +14,7 @@ export class SearchCondition {
 export const searchArticles = async (
   cond: SearchCondition
 ): Promise<Article[]> => {
-  const articleIds = ["1", "2", "3"];
+  const articleIds = [1, 2, 3];
   const articles = await findArticles(articleIds);
   return articles;
 };
