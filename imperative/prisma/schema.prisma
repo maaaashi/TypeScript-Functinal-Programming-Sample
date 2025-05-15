@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  taggedArticles TagedArticle[]
+}
+
+model TagedArticle {
+  tag     Tag @relation(fields: [tagId], references: [id])
+  tagId   Int
+  article Article @relation(fields: [articleId], references: [id])
+  articleId Int
+
+  @@id ([tagId, articleId])
+}
+
+model Article {
+  id        Int     @id @default(autoincrement())
+  title     String
+  url       String
+  likes     Int     @default(0)
+  stocks    Int     @default(0)
+  createdAt DateTime @default(now())
+
+  tagedArticles TagedArticle[]
+}
