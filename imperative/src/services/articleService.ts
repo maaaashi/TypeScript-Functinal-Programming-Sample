@@ -14,10 +14,7 @@ export class SearchCondition {
 export const searchArticles = async (
   cond: SearchCondition
 ): Promise<Article[]> => {
-  const articleIds = [2];
+  const articleIds = [1, 2];
   const articles = await findArticles(articleIds);
-  return articles.map(
-    ({ id, title, url, createdAt, tagedArticles }) =>
-      new Article(`${id}`, title, url)
-  );
+  return articles.map(({ id, title, url }) => new Article(`${id}`, title, url));
 };

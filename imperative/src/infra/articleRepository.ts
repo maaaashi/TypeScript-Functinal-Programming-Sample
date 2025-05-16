@@ -1,7 +1,8 @@
 import { PrismaClient } from "../../generated/prisma/index.js";
 
+const prisma = new PrismaClient();
+
 export const findArticles = async (ids: number[]) => {
-  const prisma = new PrismaClient();
   return await prisma.article.findMany({
     where: {
       id: {
