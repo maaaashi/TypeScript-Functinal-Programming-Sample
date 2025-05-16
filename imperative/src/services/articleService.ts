@@ -1,5 +1,5 @@
 import { findArticles } from "../infra/articleRepository.js";
-import type { Article } from "../model/article.js";
+import { Article } from "../model/article.js";
 
 export class SearchCondition {
   constructor(
@@ -14,7 +14,10 @@ export class SearchCondition {
 export const searchArticles = async (
   cond: SearchCondition
 ): Promise<Article[]> => {
-  const articleIds = [1, 2, 3];
+  const articleIds = [2];
   const articles = await findArticles(articleIds);
-  return articles;
+  return articles.map(
+    ({ id, title, url, createdAt, tagedArticles }) =>
+      new Article(`${id}`, title, url)
+  );
 };
