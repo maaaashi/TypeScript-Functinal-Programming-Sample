@@ -4,16 +4,14 @@
 
 👉 気になった方は[こちら](https://your-blog-link.dev/ddd-vs-traditional)の記事も合わせてご覧ください。
 
-
 ## 📦 ディレクトリ構成
 
 ```
 src/
-├── environments    # DBなどの共通セットアップ
+├── compose.yaml    # Elasticsearch
 ├── imperative/     # 一般的なサービス設計スタイル（命令型）
 └── functional-ddd/ # 関数型 + ドメイン駆動設計スタイル
 ```
-
 
 ## 🧩 ユースケース
 
@@ -27,4 +25,4 @@ src/
 
 - TypeScript
 - hono
-- fp-ts（関数型ライブラリ、functional-dddで使用）
+- fp-ts（関数型ライブラリ、functional-ddd で使用）
