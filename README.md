@@ -16,7 +16,7 @@ src/
 ## 🔧 ES セットアップ
 
 ```bash
-$ docker run -it --rm -e "discovery.type=single-node" -e "xpack.security.enabled=false" -p 9200:9200 -p 9300:9300 docker.elastic.co/elasticsearch/elasticsearch:9.0.1sticsearch.node.id
+$ docker run -it --rm -e "discovery.type=single-node" -e "xpack.security.enabled=false" -p 9200:9200 -p 9300:9300 docker.elastic.co/elasticsearch/elasticsearch:9.0.1
 $ ./es_setup.sh
 ```
 
