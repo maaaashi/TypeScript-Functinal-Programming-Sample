@@ -1,6 +1,5 @@
 import { Client } from "@elastic/elasticsearch";
-
-const client = new Client({});
+import type { SearchCondition } from "../services/articleService.js";
 
 interface Document {
   id: string;
@@ -8,15 +7,23 @@ interface Document {
   content: string;
 }
 
-async function run() {
-  const result = await client.search<Document>({
-    index: "articles",
-    query: {
-      match: { content: "winter" },
-    },
-  });
+export const searchArticleDocuments = async ({ query }: SearchCondition) => {
+  try {
+    const client = new Client({
+      node: "http://localhost:9200",
+    });
 
-  console.log(result.hits.hits);
-}
+    const result = await client.search<Document>({
+      index: "articles",
+      query: {
+        match: { content: query },
+      },
+    });
 
-run().catch(console.log);
+    console.log(result.hits.hits);
+    console.log(result);
+  } catch (e) {
+    console.error(e);
+  }
+  return [1, 2];
+};
