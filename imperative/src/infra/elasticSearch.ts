@@ -1,20 +1,18 @@
 import { Client } from "@elastic/elasticsearch";
 
-const client = new Client({
-  cloud: { id: "<cloud-id>" },
-  auth: { apiKey: "base64EncodedKey" },
-});
+const client = new Client({});
 
 interface Document {
-  character: string;
-  quote: string;
+  id: string;
+  title: string;
+  content: string;
 }
 
 async function run() {
   const result = await client.search<Document>({
-    index: "game-of-thrones",
+    index: "articles",
     query: {
-      match: { quote: "winter" },
+      match: { content: "winter" },
     },
   });
 
