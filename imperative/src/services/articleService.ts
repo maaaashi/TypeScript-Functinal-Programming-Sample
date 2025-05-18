@@ -20,6 +20,6 @@ export const searchArticles = async (
   cond: SearchCondition
 ): Promise<Article[]> => {
   const articleIds = await searchArticleDocuments(cond);
-  const articles = await findArticles(articleIds);
+  const articles = await findArticles(articleIds.map((id) => +id));
   return articles.map(({ id, title, url }) => new Article(`${id}`, title, url));
 };

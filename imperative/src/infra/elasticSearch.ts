@@ -20,10 +20,9 @@ export const searchArticleDocuments = async ({ query }: SearchCondition) => {
       },
     });
 
-    console.log(result.hits.hits);
-    console.log(result);
+    return result.hits.hits.map((h) => h._source!.id);
   } catch (e) {
     console.error(e);
+    return [];
   }
-  return [1, 2];
 };
