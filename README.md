@@ -13,6 +13,13 @@ src/
 └── functional-ddd/ # 関数型 + ドメイン駆動設計スタイル
 ```
 
+## 🔧 ES セットアップ
+
+```bash
+$ docker run -it --rm -e "discovery.type=single-node" -e "xpack.security.enabled=false" -p 9200:9200 -p 9300:9300 docker.elastic.co/elasticsearch/elasticsearch:9.0.1sticsearch.node.id
+$ ./es_setup.sh
+```
+
 ## 🧩 ユースケース
 
 架空の検索システムを題材に、以下の操作を共通の要件として実装しています。
