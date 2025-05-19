@@ -5,14 +5,25 @@ import { Article } from "../model/article.js";
 export class SearchCondition {
   constructor(
     private readonly _query: string,
-    private readonly limit: number,
-    private readonly offset: number,
-    private readonly sort: string,
-    private readonly page: number
+    private readonly _limit: number,
+    private readonly _offset: number,
+    private readonly _sort: "asc" | "desc"
   ) {}
 
   get query(): string {
     return this._query;
+  }
+
+  get limit(): number {
+    return this._limit;
+  }
+
+  get offset(): number {
+    return this._offset;
+  }
+
+  get sort(): "asc" | "desc" {
+    return this._sort;
   }
 }
 

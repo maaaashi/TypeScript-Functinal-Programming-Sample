@@ -8,12 +8,6 @@ app.get("/articles", async (c) => {
   return await searchArticlesController(c);
 });
 
-app.get("/search", async (c) => {
-  const query = c.req.query("q");
-  console.log(query);
-  return c.json({ query });
-});
-
 serve(
   {
     fetch: app.fetch,

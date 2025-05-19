@@ -10,25 +10,23 @@ curl -X PUT "http://localhost:9200/articles" \
       "properties": {
         "id":       { "type": "keyword" },
         "title":    { "type": "text" },
-        "content":  { "type": "text" }
+        "content":  { "type": "text" },
+        "created_at":  { "type": "date" }
       }
     }
   }'
 
-curl -s https://qiita.com/api/v2/items/13cdf02c394cf9668de7 \
-| jq -r '{id: 1, title: .title, content: .rendered_body}' \
+jq -r '{id: 1, title: .title, content: .rendered_body, created_at: .created_at}' articles/1.json \
 | curl -X POST "http://localhost:9200/articles/_doc" \
   -H 'Content-Type: application/json' \
   -d @-
 
-curl -s https://qiita.com/api/v2/items/3376cdd0b6ee75c634eb \
-| jq -r '{id: 2, title: .title, content: .rendered_body}' \
+jq -r '{id: 2, title: .title, content: .rendered_body, created_at: .created_at}' articles/2.json \
 | curl -X POST "http://localhost:9200/articles/_doc" \
   -H 'Content-Type: application/json' \
   -d @-
 
-curl -s https://qiita.com/api/v2/items/f592357a70307820f0dc \
-| jq -r '{id: 3, title: .title, content: .rendered_body}' \
+jq -r '{id: 3, title: .title, content: .rendered_body, created_at: .created_at}' articles/3.json \
 | curl -X POST "http://localhost:9200/articles/_doc" \
   -H 'Content-Type: application/json' \
   -d @-
