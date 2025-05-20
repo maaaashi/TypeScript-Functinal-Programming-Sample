@@ -7,7 +7,7 @@ CREATE TABLE "Tag" (
 -- CreateTable
 CREATE TABLE "TagedArticle" (
     "tagId" INTEGER NOT NULL,
-    "articleId" INTEGER NOT NULL,
+    "articleId" TEXT NOT NULL,
 
     PRIMARY KEY ("tagId", "articleId"),
     CONSTRAINT "TagedArticle_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "Tag" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -16,7 +16,7 @@ CREATE TABLE "TagedArticle" (
 
 -- CreateTable
 CREATE TABLE "Article" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "likes" INTEGER NOT NULL DEFAULT 0,

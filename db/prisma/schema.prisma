@@ -8,7 +8,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
 model Tag {
@@ -22,13 +22,13 @@ model TagedArticle {
   tag     Tag @relation(fields: [tagId], references: [id])
   tagId   Int
   article Article @relation(fields: [articleId], references: [id])
-  articleId Int
+  articleId String
 
   @@id ([tagId, articleId])
 }
 
 model Article {
-  id        Int     @id @default(autoincrement())
+  id        String     @id @default(uuid())
   title     String
   url       String
   likes     Int     @default(0)

@@ -1,8 +1,8 @@
-import { PrismaClient } from "../../generated/prisma/index.js";
+import { PrismaClient } from "../../../db/generated/prisma/index.js";
 
 const prisma = new PrismaClient();
 
-export const findArticles = async (ids: number[]) => {
+export const findArticles = async (ids: string[]) => {
   return await prisma.article.findMany({
     where: {
       id: {
