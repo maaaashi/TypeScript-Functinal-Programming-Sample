@@ -1,11 +1,11 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { searchArticlesController } from "./controllers/articleController.js";
+import { searchArticlesHandler } from "./handler/articleHandler.js";
 
 const app = new Hono();
 
 app.get("/articles", async (c) => {
-  return await searchArticlesController(c);
+  return await searchArticlesHandler(c);
 });
 
 serve(

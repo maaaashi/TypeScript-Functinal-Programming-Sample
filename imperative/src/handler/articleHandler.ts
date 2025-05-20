@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { searchArticles, SearchCondition } from "../services/articleService.js";
 
-export const searchArticlesController = async (c: Context) => {
+export const searchArticlesHandler = async (c: Context) => {
   const { query, limit, sort, offset } = c.req.query();
   const cond = new SearchCondition(
     query,
