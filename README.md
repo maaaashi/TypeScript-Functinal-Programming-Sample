@@ -2,7 +2,7 @@
 
 このリポジトリは、同一のユースケースに対して 2 種類の設計アプローチを比較したサンプルコードです。
 
-👉 気になった方は[こちら](https://your-blog-link.dev/ddd-vs-traditional)の記事も合わせてご覧ください。
+👉 気になった方は[こちら](https://zenn.dev/maaaashi/articles/aea1a85753acf6)の記事も合わせてご覧ください。
 
 ## 📦 ディレクトリ構成
 
