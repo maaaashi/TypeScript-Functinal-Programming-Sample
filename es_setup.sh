@@ -16,17 +16,10 @@ curl -X PUT "http://localhost:9200/articles" \
     }
   }'
 
-jq -r '{id: 1, title: .title, content: .rendered_body, created_at: .created_at}' articles/1.json \
-| curl -X POST "http://localhost:9200/articles/_doc" \
-  -H 'Content-Type: application/json' \
-  -d @-
-
-jq -r '{id: 2, title: .title, content: .rendered_body, created_at: .created_at}' articles/2.json \
-| curl -X POST "http://localhost:9200/articles/_doc" \
-  -H 'Content-Type: application/json' \
-  -d @-
-
-jq -r '{id: 3, title: .title, content: .rendered_body, created_at: .created_at}' articles/3.json \
-| curl -X POST "http://localhost:9200/articles/_doc" \
-  -H 'Content-Type: application/json' \
-  -d @-
+jq -c '.[] | {id: .id, title: .title, content: .body, created_at: .created_at}' articles.json | \
+while read -r article; do
+  echo "$article" | \
+  curl -s -X POST "http://localhost:9200/articles/_doc" \
+    -H 'Content-Type: application/json' \
+    -d @- | jq .
+done
