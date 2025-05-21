@@ -4,20 +4,13 @@ import {
   ValidateSearchCondition,
 } from "../Domain/SearchCondition.js";
 import { searchArticlesUsecase } from "../Usecase/SearchArticles.js";
-import { pipe } from "fp-ts/function";
-import { fromEither, chain, map, match } from "fp-ts/TaskEither";
+import { chain, fromEither, map, match } from "fp-ts/lib/TaskEither.js";
+import { pipe } from "fp-ts/lib/function.js";
 
 export const searchArticlesHandler = async (c: Context) => {
-  const { query, limit, offset, sort } = c.req.query();
-  const unvalidateSearchCondition = new UnValidateSearchCondition(
-    query,
-    +limit,
-    +offset,
-    sort
-  );
-
   return pipe(
-    unvalidateSearchCondition,
+    c.req.query(),
+    UnValidateSearchCondition.make,
     ValidateSearchCondition.apply,
     fromEither,
     chain(searchArticlesUsecase),
@@ -28,5 +21,5 @@ export const searchArticlesHandler = async (c: Context) => {
       (err) => c.json({ error: err.message }, 500),
       (articles) => c.json({ articles })
     )
-  );
+  )();
 };

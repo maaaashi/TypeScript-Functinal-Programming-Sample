@@ -1,15 +1,24 @@
 import { z } from "zod";
-import { type Either, left, right } from "fp-ts/Either";
+import { type Either, left, right } from "fp-ts/lib/Either.js";
 
 export class SearchConditionValidationError extends Error {}
 
 export class UnValidateSearchCondition {
   constructor(
-    public query: string,
-    public limit: number,
-    public offset: number,
-    public sort: string
+    public query?: string,
+    public limit?: string,
+    public offset?: string,
+    public sort?: string
   ) {}
+
+  static make({
+    query,
+    limit,
+    offset,
+    sort,
+  }: Record<string, string>): UnValidateSearchCondition {
+    return new UnValidateSearchCondition(query, limit, offset, sort);
+  }
 }
 
 export class ValidateSearchCondition {
