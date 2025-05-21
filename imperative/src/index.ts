@@ -4,9 +4,7 @@ import { searchArticlesHandler } from "./handler/articleHandler.js";
 
 const app = new Hono();
 
-app.get("/articles", async (c) => {
-  return await searchArticlesHandler(c);
-});
+app.get("/articles", searchArticlesHandler);
 
 serve(
   {
