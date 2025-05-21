@@ -15,18 +15,15 @@ export const searchArticlesHandler = async (c: Context) => {
     +offset,
     sort
   );
-  const result = pipe(
+
+  return pipe(
     unvalidateSearchCondition,
     ValidateSearchCondition.apply,
     fromEither,
     chain(searchArticlesUsecase),
     map(({ articles }) => {
       articles.map(({ id, title, body }) => ({ id, title, body }));
-    })
-  );
-
-  return pipe(
-    result,
+    }),
     match(
       (err) => c.json({ error: err.message }, 500),
       (articles) => c.json({ articles })
