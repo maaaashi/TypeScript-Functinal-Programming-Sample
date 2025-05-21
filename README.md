@@ -23,20 +23,28 @@ $ npm run db:init
 ## 🔧 ES セットアップ
 
 ```bash
-$ docker run -it --rm -e "discovery.type=single-node" -e "xpack.security.enabled=false" -p 9200:9200 -p 9300:9300 docker.elastic.co/elasticsearch/elasticsearch:9.0.1
-$ ./es_setup.sh
+$ cd es
+$ docker compose up
+$ ./es_setup.sh (初回のみ)
 ```
 
 ## 🧩 ユースケース
 
 架空の検索システムを題材に、以下の操作を共通の要件として実装しています。
 
-- 注文の作成
-- 請求書の生成
-- ステータスの変更
+- 記事の検索
+- 記事データの取得
 
 ## 📚 技術スタック
 
 - TypeScript
 - hono
-- fp-ts（関数型ライブラリ、functional-ddd で使用）
+  - 軽量な Web フレームワーク
+- prisma
+  - ORM
+- Elasticsearch
+  - 検索エンジン
+- zod
+  - バリデーションライブラリ
+- fp-ts
+  - 関数型ライブラリ、functional-ddd で使用
