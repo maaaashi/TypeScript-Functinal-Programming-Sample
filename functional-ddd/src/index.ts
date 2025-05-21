@@ -1,6 +1,6 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { searchArticlesHandler } from "./handler/article.js";
+import { searchArticlesHandler } from "./Handler/article.js";
 
 const app = new Hono();
 
