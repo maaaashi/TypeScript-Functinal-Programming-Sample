@@ -46,3 +46,5 @@ export class Articles {
     return this._articles;
   }
 }
+
+export class SearchArticlesError extends Error {}
