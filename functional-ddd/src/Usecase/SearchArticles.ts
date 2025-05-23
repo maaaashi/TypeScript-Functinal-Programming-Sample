@@ -7,7 +7,12 @@ export const searchArticlesUsecase: (
 ) => TaskEither<Error, Articles> = () =>
   tryCatch(
     async () => {
-      throw new Error("");
+      throw new Error("いい感じのエラーです");
     },
-    (e) => new Error("")
+    (e) => {
+      if (e instanceof Error) {
+        return e;
+      }
+      return new Error("予期せぬエラーです");
+    }
   );
