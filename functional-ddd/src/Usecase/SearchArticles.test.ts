@@ -2,11 +2,15 @@ import { expect, test, describe } from "vitest";
 import { search } from "./SearchArticles.js";
 import { ValidateSearchCondition } from "../Domain/SearchCondition.js";
 import { fold } from "fp-ts/lib/Either.js";
-import { Articles } from "../Domain/Article.js";
-
-const sum = () => {
-  return 1 + 2;
-};
+import {
+  Article,
+  ArticleBody,
+  ArticleId,
+  ArticleIds,
+  Articles,
+  ArticleTitle,
+} from "../Domain/Article.js";
+import type { ArticleIdsPort } from "../Port/ArticleIds.js";
 
 class ConditionMock extends ValidateSearchCondition {
   static generate(
@@ -28,7 +32,17 @@ describe("searchArticlesUsecase", () => {
         0,
         "asc"
       );
-      const result = search(validateSearchCondition);
+      const articleIdsPort: ArticleIdsPort = {
+        searchArticleIds: async () => {
+          return new ArticleIds([]);
+        },
+      };
+      const result = search(
+        {
+          articleIdsPort,
+        },
+        validateSearchCondition
+      );
       const either = await result();
 
       fold(
@@ -36,7 +50,13 @@ describe("searchArticlesUsecase", () => {
           throw error;
         },
         (articles) => {
-          const expected = new Articles([]);
+          const expected = new Articles([
+            new Article(
+              new ArticleId("1"),
+              new ArticleTitle("title"),
+              new ArticleBody("body")
+            ),
+          ]);
           expect(articles).toStrictEqual(expected);
         }
       )(either);

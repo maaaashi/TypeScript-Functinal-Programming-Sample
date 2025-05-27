@@ -1,3 +1,7 @@
+export class ArticleIds {
+  constructor(private _ids: ArticleId[]) {}
+}
+
 export class ArticleId {
   constructor(private _value: string) {}
   get value(): string {
