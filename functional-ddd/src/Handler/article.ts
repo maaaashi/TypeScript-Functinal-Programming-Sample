@@ -3,7 +3,7 @@ import {
   UnValidateSearchCondition,
   ValidateSearchCondition,
 } from "../Domain/SearchCondition.js";
-import { searchArticlesUsecase } from "../Usecase/SearchArticles.js";
+import * as usecase from "../Usecase/SearchArticles.js";
 import { chain, fromEither, map, match } from "fp-ts/lib/TaskEither.js";
 import { pipe } from "fp-ts/lib/function.js";
 
@@ -13,7 +13,7 @@ export const searchArticlesHandler = async (c: Context) =>
     UnValidateSearchCondition.make,
     ValidateSearchCondition.apply,
     fromEither,
-    chain(searchArticlesUsecase),
+    chain(usecase.search),
     map(({ articles }) => {
       articles.map(({ id, title, body }) => ({ id, title, body }));
     }),

@@ -22,7 +22,7 @@ export class UnValidateSearchCondition {
 }
 
 export class ValidateSearchCondition {
-  private constructor(
+  protected constructor(
     private readonly _query: string,
     private readonly _limit: number,
     private readonly _offset: number,
