@@ -11,6 +11,7 @@ import {
   ArticleTitle,
 } from "../Domain/Article.js";
 import type { ArticleIdsPort } from "../Port/ArticleIds.js";
+import type { ArticlesPort } from "../Port/Articles.js";
 
 class ConditionMock extends ValidateSearchCondition {
   static generate(
@@ -32,18 +33,44 @@ describe("searchArticlesUsecase", () => {
         0,
         "asc"
       );
+      let searchCounter = 0;
       const articleIdsPort: ArticleIdsPort = {
-        searchArticleIds: async () => {
-          return new ArticleIds([]);
+        searchArticleIds: async (cond: ValidateSearchCondition) => {
+          expect(cond).toStrictEqual(validateSearchCondition);
+          searchCounter++;
+          return new ArticleIds([new ArticleId("1"), new ArticleId("2")]);
         },
       };
-      const result = search(
+
+      let findArticlesCounter = 0;
+      const articlesPort: ArticlesPort = {
+        findArticles: async (ids: ArticleIds) => {
+          expect(ids).toStrictEqual(
+            new ArticleIds([new ArticleId("1"), new ArticleId("2")])
+          );
+          findArticlesCounter++;
+          return new Articles([
+            new Article(
+              new ArticleId("1"),
+              new ArticleTitle("title 1"),
+              new ArticleBody("body 1")
+            ),
+            new Article(
+              new ArticleId("2"),
+              new ArticleTitle("title 2"),
+              new ArticleBody("body 2")
+            ),
+          ]);
+        },
+      };
+
+      const actual = await search(
         {
           articleIdsPort,
+          articlesPort,
         },
         validateSearchCondition
-      );
-      const either = await result();
+      )();
 
       fold(
         (error) => {
@@ -53,13 +80,21 @@ describe("searchArticlesUsecase", () => {
           const expected = new Articles([
             new Article(
               new ArticleId("1"),
-              new ArticleTitle("title"),
-              new ArticleBody("body")
+              new ArticleTitle("title 1"),
+              new ArticleBody("body 1")
+            ),
+            new Article(
+              new ArticleId("2"),
+              new ArticleTitle("title 2"),
+              new ArticleBody("body 2")
             ),
           ]);
           expect(articles).toStrictEqual(expected);
         }
-      )(either);
+      )(actual);
+
+      expect(searchCounter).toBe(1);
+      expect(findArticlesCounter).toBe(1);
     });
   });
 });

@@ -1,17 +1,12 @@
-import {
-  Article,
-  ArticleBody,
-  ArticleId,
-  Articles,
-  ArticleTitle,
-  SearchArticlesError,
-} from "../Domain/Article.js";
+import { Articles, SearchArticlesError } from "../Domain/Article.js";
 import type { ValidateSearchCondition } from "../Domain/SearchCondition.js";
 import { tryCatch, type TaskEither } from "fp-ts/lib/TaskEither.js";
 import type { ArticleIdsPort } from "../Port/ArticleIds.js";
+import type { ArticlesPort } from "../Port/Articles.js";
 
 interface Deps {
   articleIdsPort: ArticleIdsPort;
+  articlesPort: ArticlesPort;
 }
 
 export const search = (
@@ -20,13 +15,8 @@ export const search = (
 ): TaskEither<SearchArticlesError, Articles> =>
   tryCatch(
     async () => {
-      return new Articles([
-        new Article(
-          new ArticleId("1"),
-          new ArticleTitle("title"),
-          new ArticleBody("body")
-        ),
-      ]);
+      const ids = await deps.articleIdsPort.searchArticleIds(cond);
+      return await deps.articlesPort.findArticles(ids);
     },
     (e) => {
       if (e instanceof SearchArticlesError) {
