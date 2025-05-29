@@ -50,16 +50,8 @@ describe("searchArticlesUsecase", () => {
           );
           findArticlesCounter++;
           return new Articles([
-            new Article(
-              new ArticleId("1"),
-              new ArticleTitle("title 1"),
-              new ArticleBody("body 1")
-            ),
-            new Article(
-              new ArticleId("2"),
-              new ArticleTitle("title 2"),
-              new ArticleBody("body 2")
-            ),
+            new Article(new ArticleId("1"), new ArticleTitle("title 1")),
+            new Article(new ArticleId("2"), new ArticleTitle("title 2")),
           ]);
         },
       };
@@ -78,16 +70,8 @@ describe("searchArticlesUsecase", () => {
         },
         (articles) => {
           const expected = new Articles([
-            new Article(
-              new ArticleId("1"),
-              new ArticleTitle("title 1"),
-              new ArticleBody("body 1")
-            ),
-            new Article(
-              new ArticleId("2"),
-              new ArticleTitle("title 2"),
-              new ArticleBody("body 2")
-            ),
+            new Article(new ArticleId("1"), new ArticleTitle("title 1")),
+            new Article(new ArticleId("2"), new ArticleTitle("title 2")),
           ]);
           expect(articles).toStrictEqual(expected);
         }

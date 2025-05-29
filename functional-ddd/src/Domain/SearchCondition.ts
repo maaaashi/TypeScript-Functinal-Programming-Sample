@@ -48,4 +48,20 @@ export class ValidateSearchCondition {
       return left(new SearchConditionValidationError());
     }
   }
+
+  get query(): string {
+    return this._query;
+  }
+
+  get limit(): number {
+    return this._limit;
+  }
+
+  get offset(): number {
+    return this._offset;
+  }
+
+  get sort(): "asc" | "desc" {
+    return this._sort;
+  }
 }

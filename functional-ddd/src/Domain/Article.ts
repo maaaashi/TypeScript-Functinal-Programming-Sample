@@ -1,5 +1,9 @@
 export class ArticleIds {
   constructor(private _ids: ArticleId[]) {}
+
+  get values(): string[] {
+    return this._ids.map((id) => id.value);
+  }
 }
 
 export class ArticleId {
@@ -26,8 +30,7 @@ export class ArticleBody {
 export class Article {
   constructor(
     private readonly _id: ArticleId,
-    private readonly _title: ArticleTitle,
-    private readonly _body: ArticleBody
+    private readonly _title: ArticleTitle
   ) {}
 
   get id(): string {
@@ -36,10 +39,6 @@ export class Article {
 
   get title(): string {
     return this._title.value;
-  }
-
-  get body(): string {
-    return this._body.value;
   }
 }
 
