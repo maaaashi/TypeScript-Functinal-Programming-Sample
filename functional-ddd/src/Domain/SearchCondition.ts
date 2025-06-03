@@ -35,17 +35,34 @@ export class ValidateSearchCondition {
     try {
       const querySchema = z.object({
         query: z.coerce.string().default(""),
-        limit: z.coerce.number().int().min(1).max(100).default(10),
-        offset: z.coerce.number().int().min(0).default(0),
-        sort: z.enum(["asc", "desc"]).default("asc"),
+        limit: z.coerce
+          .number()
+          .int()
+          .min(1, { message: "limitは1以上で指定してください" })
+          .max(100, { message: "limitは100以下で指定してください" })
+          .default(10),
+        offset: z.coerce
+          .number()
+          .int()
+          .min(0, { message: "offsetは0以上で指定してください" })
+          .default(0),
+        sort: z
+          .enum(["asc", "desc"], {
+            message: 'sortは"asc"または"desc"で指定してください',
+          })
+          .default("asc"),
       });
 
       const { query, limit, sort, offset } = querySchema.parse(c);
 
       return right(new ValidateSearchCondition(query, limit, offset, sort));
     } catch (e) {
-      console.error(e);
-      return left(new SearchConditionValidationError());
+      let message = "";
+      if (e instanceof z.ZodError) {
+        message = e.errors.map((err) => err.message).join(", ");
+      }
+      console.error("Validation error:", message);
+      return left(new SearchConditionValidationError(message));
     }
   }
 
