@@ -4,7 +4,7 @@ import { tryCatch, type TaskEither } from "fp-ts/lib/TaskEither.js";
 import type { ArticleIdsPort } from "../Port/ArticleIds.js";
 import type { ArticlesPort } from "../Port/Articles.js";
 
-interface Deps {
+export interface Deps {
   articleIdsPort: ArticleIdsPort;
   articlesPort: ArticlesPort;
 }

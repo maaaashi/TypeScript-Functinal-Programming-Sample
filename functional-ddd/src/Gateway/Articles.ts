@@ -6,7 +6,7 @@ import {
   ArticleTitle,
   type ArticleIds,
 } from "../Domain/Article.js";
-import type { DBDriver } from "../Driver/ArticleDBDriver.js";
+import type { DBDriver } from "../Driver/ArticleDbDriver.js";
 import type { ArticlesPort } from "../Port/Articles.js";
 
 export class ArticlesGateway implements ArticlesPort {
