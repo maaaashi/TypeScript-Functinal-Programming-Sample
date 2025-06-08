@@ -8,15 +8,21 @@
 
 ```
 src/
-├── compose.yaml    # Elasticsearch
-├── imperative/     # 一般的なサービス設計スタイル（命令型）
-└── functional-ddd/ # 関数型 + ドメイン駆動設計スタイル
+├── es/
+|   ├── articles.json   # ダミーデータ
+|   ├── compose.yaml    # Elasticsearch
+|   └── es_setup.sh     # es 初期化スクリプト
+├── functional-ddd/     # 関数型 + ドメイン駆動設計
+├── imperative/         # 命令型
+├── README.md
+└── test.http
 ```
 
 ## 🔧 DB セットアップ (SQLite)
 
 ```bash
 $ cd db
+$ npm install
 $ npm run db:init
 ```
 
