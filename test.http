@@ -1,1 +1,1 @@
-GET http://localhost:3000/articles?query=javascript
+GET http://localhost:30000/articles?query=javascript

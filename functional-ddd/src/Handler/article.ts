@@ -4,13 +4,7 @@ import {
   ValidateSearchCondition,
 } from "../Domain/SearchCondition.js";
 import * as usecase from "../Usecase/SearchArticles.js";
-import {
-  chain,
-  fromEither,
-  map,
-  tryCatch,
-  TaskEither,
-} from "fp-ts/lib/TaskEither.js";
+import { chain, fromEither, map } from "fp-ts/lib/TaskEither.js";
 import { pipe } from "fp-ts/lib/function.js";
 import { fold } from "fp-ts/lib/Either.js";
 import { ArticleIdsGateway } from "../Gateway/ArticleIds.js";
@@ -18,24 +12,35 @@ import { ArticlesGateway } from "../Gateway/Articles.js";
 import { ESDriver } from "../Driver/ESDriver.js";
 import { DBDriver } from "../Driver/ArticleDbDriver.js";
 import { Client } from "@elastic/elasticsearch";
+import type { SearchArticlesError } from "../Domain/Article.js";
 
-type ArticleResponse = {
-  error: string;
+type ArticleSuccessResponse = {
   articles: Array<{ id: string; title: string }>;
 };
 
-const createErrorResponse = (message: string): ArticleResponse => ({
+type ArticleErrorResponse = {
+  error: string;
+};
+
+type ArticleResponse = ArticleSuccessResponse | ArticleErrorResponse;
+
+const createErrorResponse = (message: string): ArticleErrorResponse => ({
   error: message,
-  articles: [],
 });
 
-const createSuccessResponse = (articles: Array<{ id: string; title: string }>): ArticleResponse => ({
-  error: "",
+const createSuccessResponse = (
+  articles: Array<{ id: string; title: string }>
+): ArticleSuccessResponse => ({
   articles,
 });
 
-const handleResponse = (response: ArticleResponse) => (c: Context) =>
-  c.json(response, 200);
+const handleResponse = (response: ArticleResponse) => async (c: Context) => {
+  if ("error" in response) {
+    return c.json({ message: response.error }, 200);
+  }
+
+  return c.json(response, 200);
+};
 
 export const searchArticlesHandler = async (c: Context) => {
   const client = new Client({
@@ -47,17 +52,18 @@ export const searchArticlesHandler = async (c: Context) => {
     articlesPort: new ArticlesGateway(new DBDriver()),
   };
 
-  return await pipe(
+  const result = await pipe(
     c.req.query(),
     UnValidateSearchCondition.make,
     ValidateSearchCondition.apply,
     fromEither,
     chain((cond) => usecase.search(deps, cond)),
     map(({ articles }) => articles.map(({ id, title }) => ({ id, title }))),
-    map(createSuccessResponse),
-    tryCatch(
-      handleResponse,
-      (error) => createErrorResponse(error instanceof Error ? error.message : "予期せぬエラーが発生しました")
-    )
+    map(createSuccessResponse)
   )();
+
+  return fold<SearchArticlesError, ArticleResponse, Promise<Response>>(
+    (error) => handleResponse(createErrorResponse(error.message))(c),
+    (success) => handleResponse(success)(c)
+  )(result);
 };
