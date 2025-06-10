@@ -4,15 +4,13 @@ import {
   ValidateSearchCondition,
 } from "../Domain/SearchCondition.js";
 import * as usecase from "../Usecase/SearchArticles.js";
-import { chain, fromEither, map } from "fp-ts/lib/TaskEither.js";
+import { chain, fromEither, map, match } from "fp-ts/lib/TaskEither.js";
 import { pipe } from "fp-ts/lib/function.js";
-import { fold } from "fp-ts/lib/Either.js";
 import { ArticleIdsGateway } from "../Gateway/ArticleIds.js";
 import { ArticlesGateway } from "../Gateway/Articles.js";
 import { ESDriver } from "../Driver/ESDriver.js";
 import { DBDriver } from "../Driver/ArticleDbDriver.js";
 import { Client } from "@elastic/elasticsearch";
-import type { SearchArticlesError } from "../Domain/Article.js";
 
 type ArticleSuccessResponse = {
   articles: Array<{ id: string; title: string }>;
@@ -52,18 +50,17 @@ export const searchArticlesHandler = async (c: Context) => {
     articlesPort: new ArticlesGateway(new DBDriver()),
   };
 
-  const result = await pipe(
+  return await pipe(
     c.req.query(),
     UnValidateSearchCondition.make,
     ValidateSearchCondition.apply,
     fromEither,
     chain((cond) => usecase.search(deps, cond)),
     map(({ articles }) => articles.map(({ id, title }) => ({ id, title }))),
-    map(createSuccessResponse)
+    map(createSuccessResponse),
+    match(
+      (error) => handleResponse(createErrorResponse(error.message))(c),
+      (success) => handleResponse(success)(c)
+    )
   )();
-
-  return fold<SearchArticlesError, ArticleResponse, Promise<Response>>(
-    (error) => handleResponse(createErrorResponse(error.message))(c),
-    (success) => handleResponse(success)(c)
-  )(result);
 };
