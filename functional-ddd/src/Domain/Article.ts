@@ -1,8 +1,17 @@
+import { of, type Task } from "fp-ts/lib/Task.js";
+import type { ValidateSearchCondition } from "./SearchCondition.js";
+
+export type SearchArticleIds = (ids: ArticleIds) => Promise<ArticleIds>;
+
 export class ArticleIds {
   constructor(private _ids: ArticleId[]) {}
 
   get values(): string[] {
     return this._ids.map((id) => id.value);
+  }
+
+  static search(search: SearchArticleIds, cond: ValidateSearchCondition): Task<ArticleIds> {
+    return of(new ArticleIds([]))
   }
 }
 
@@ -42,11 +51,17 @@ export class Article {
   }
 }
 
+export type FindByIds = (ids: ArticleIds) => Promise<Articles>;
+
 export class Articles {
   constructor(private readonly _articles: Article[]) {}
 
   get articles(): Article[] {
     return this._articles;
+  }
+
+  static findByIds(find: FindByIds, ids: ArticleIds): Task<Articles> {
+    return of(new Articles([]))
   }
 }
 
