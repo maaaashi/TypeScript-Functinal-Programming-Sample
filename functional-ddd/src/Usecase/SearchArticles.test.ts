@@ -4,7 +4,6 @@ import { ValidateSearchCondition } from "../Domain/SearchCondition.js";
 import { fold } from "fp-ts/lib/Either.js";
 import {
   Article,
-  ArticleBody,
   ArticleId,
   ArticleIds,
   Articles,

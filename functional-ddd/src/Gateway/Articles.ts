@@ -1,6 +1,5 @@
 import {
   Article,
-  ArticleBody,
   ArticleId,
   Articles,
   ArticleTitle,

@@ -20,7 +20,7 @@ const searchArticleIds = (
 ): TaskEither<SearchArticlesError, ArticleIds> =>
   tryCatch(
     () => deps.articleIdsPort.searchArticleIds(cond),
-    (e) => new SearchArticlesError("記事IDの検索中にエラーが発生しました")
+    (_) => new SearchArticlesError("記事IDの検索中にエラーが発生しました")
   );
 
 const findArticles = (
@@ -29,7 +29,7 @@ const findArticles = (
 ): TaskEither<SearchArticlesError, Articles> =>
   tryCatch(
     () => deps.articlesPort.findArticles(ids),
-    (e) => new SearchArticlesError("記事の取得中にエラーが発生しました")
+    (_) => new SearchArticlesError("記事の取得中にエラーが発生しました")
   );
 
 export const search = (
