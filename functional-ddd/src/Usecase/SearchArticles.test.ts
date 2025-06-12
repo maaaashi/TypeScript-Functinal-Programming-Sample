@@ -8,9 +8,9 @@ import {
   ArticleIds,
   Articles,
   ArticleTitle,
+  type FindByIds,
+  type SearchArticleIds,
 } from "../Domain/Article.js";
-import type { ArticleIdsPort } from "../Port/ArticleIds.js";
-import type { ArticlesPort } from "../Port/Articles.js";
 
 class ConditionMock extends ValidateSearchCondition {
   static generate(
@@ -33,32 +33,29 @@ describe("searchArticlesUsecase", () => {
         "asc"
       );
       let searchCounter = 0;
-      const articleIdsPort: ArticleIdsPort = {
-        searchArticleIds: async (cond: ValidateSearchCondition) => {
-          expect(cond).toStrictEqual(validateSearchCondition);
-          searchCounter++;
-          return new ArticleIds([new ArticleId("1"), new ArticleId("2")]);
-        },
+      const searchArticleIds: SearchArticleIds = async (cond) => {
+        expect(cond).toStrictEqual(validateSearchCondition);
+        searchCounter++;
+        return new ArticleIds([new ArticleId("1"), new ArticleId("2")]);
       };
 
       let findArticlesCounter = 0;
-      const articlesPort: ArticlesPort = {
-        findArticles: async (ids: ArticleIds) => {
-          expect(ids).toStrictEqual(
-            new ArticleIds([new ArticleId("1"), new ArticleId("2")])
-          );
-          findArticlesCounter++;
-          return new Articles([
-            new Article(new ArticleId("1"), new ArticleTitle("title 1")),
-            new Article(new ArticleId("2"), new ArticleTitle("title 2")),
-          ]);
-        },
+      const findByIds: FindByIds = async (ids) => {
+        expect(ids).toStrictEqual(
+          new ArticleIds([new ArticleId("1"), new ArticleId("2")])
+        );
+        findArticlesCounter++;
+
+        return new Articles([
+          new Article(new ArticleId("1"), new ArticleTitle("title 1")),
+          new Article(new ArticleId("2"), new ArticleTitle("title 2")),
+        ]);
       };
 
       const actual = await search(
         {
-          articleIdsPort,
-          articlesPort,
+          searchArticleIds,
+          findByIds,
         },
         validateSearchCondition
       )();

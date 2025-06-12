@@ -1,42 +1,29 @@
 import {
   ArticleIds,
   Articles,
-  SearchArticlesError,
+  SearchArticleIdsError,
 } from "../Domain/Article.js";
 import type { ValidateSearchCondition } from "../Domain/SearchCondition.js";
-import { tryCatch, type TaskEither, chain } from "fp-ts/lib/TaskEither.js";
+import {
+  SearchArticlesError,
+  type FindByIds,
+  type SearchArticleIds,
+} from "../Domain/Article.js";
 import { pipe } from "fp-ts/lib/function.js";
-import type { ArticleIdsPort } from "../Port/ArticleIds.js";
-import type { ArticlesPort } from "../Port/Articles.js";
+import { chain, mapLeft, type TaskEither } from "fp-ts/lib/TaskEither.js";
 
 export interface Deps {
-  articleIdsPort: ArticleIdsPort;
-  articlesPort: ArticlesPort;
+  searchArticleIds: SearchArticleIds;
+  findByIds: FindByIds;
 }
-
-const searchArticleIds = (
-  deps: Deps,
-  cond: ValidateSearchCondition
-): TaskEither<SearchArticlesError, ArticleIds> =>
-  tryCatch(
-    () => deps.articleIdsPort.searchArticleIds(cond),
-    (_) => new SearchArticlesError("記事IDの検索中にエラーが発生しました")
-  );
-
-const findArticles = (
-  deps: Deps,
-  ids: ArticleIds
-): TaskEither<SearchArticlesError, Articles> =>
-  tryCatch(
-    () => deps.articlesPort.findArticles(ids),
-    (_) => new SearchArticlesError("記事の取得中にエラーが発生しました")
-  );
 
 export const search = (
   deps: Deps,
   cond: ValidateSearchCondition
 ): TaskEither<SearchArticlesError, Articles> =>
   pipe(
-    searchArticleIds(deps, cond),
-    chain((ids) => findArticles(deps, ids))
+    cond,
+    (c) => ArticleIds.search(deps.searchArticleIds, c),
+    chain((ids) => Articles.findByIds(deps.findByIds, ids)),
+    mapLeft((e) => new SearchArticleIdsError(e.message))
   );
