@@ -25,18 +25,30 @@ describe("Article", () => {
 
         const result = ArticleIds.search(search, cond);
 
+        // fold(
+        //   (error) => {
+        //     throw error;
+        //   },
+        //   async (ids: ArticleIds) => {
+        //     const expected = new ArticleIds([
+        //       new ArticleId("1"),
+        //       new ArticleId("2"),
+        //     ]);
+        //     expect(ids).toStrictEqual(expected);
+        //   }
+        // )(result);
         fold(
           (error) => {
             throw error;
           },
-          (ids) => {
+          (ids: ArticleIds) => async () => {
             const expected = new ArticleIds([
               new ArticleId("1"),
               new ArticleId("2"),
             ]);
             expect(ids).toStrictEqual(expected);
           }
-        )(result);
+        )(result)();
       });
 
       test("検索に失敗した時は特定のエラーを返す", () => {
@@ -51,14 +63,14 @@ describe("Article", () => {
           (error) => {
             throw error;
           },
-          (ids) => {
+          (ids) => async () => {
             const expected = new ArticleIds([
               new ArticleId("1"),
               new ArticleId("2"),
             ]);
             expect(ids).toStrictEqual(expected);
           }
-        )(result);
+        )(result)();
       });
     });
   });
