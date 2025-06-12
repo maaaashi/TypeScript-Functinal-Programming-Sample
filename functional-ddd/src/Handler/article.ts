@@ -6,11 +6,11 @@ import {
 import * as usecase from "../Usecase/SearchArticles.js";
 import { chain, fromEither, map, match } from "fp-ts/lib/TaskEither.js";
 import { pipe } from "fp-ts/lib/function.js";
-import { ArticleIdsGateway } from "../Gateway/ArticleIds.js";
-import { ArticlesGateway } from "../Gateway/Articles.js";
 import { ESDriver } from "../Driver/ESDriver.js";
-import { DBDriver } from "../Driver/ArticleDbDriver.js";
+import { DBDriver } from "../Driver/ArticleDBDriver.js";
 import { Client } from "@elastic/elasticsearch";
+import { searchArticleIds } from "../Gateway/ArticleIds.js";
+import { findByIds } from "../Gateway/Articles.js";
 
 type ArticleSuccessResponse = {
   articles: Array<{ id: string; title: string }>;
@@ -46,8 +46,8 @@ export const searchArticlesHandler = async (c: Context) => {
   });
 
   const deps: usecase.Deps = {
-    articleIdsPort: new ArticleIdsGateway(new ESDriver(client)),
-    articlesPort: new ArticlesGateway(new DBDriver()),
+    searchArticleIds: searchArticleIds(new ESDriver(client)),
+    findByIds: findByIds(new DBDriver()),
   };
 
   return await pipe(

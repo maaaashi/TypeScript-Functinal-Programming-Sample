@@ -1,7 +1,11 @@
-import { of, type Task } from "fp-ts/lib/Task.js";
 import type { ValidateSearchCondition } from "./SearchCondition.js";
+import { type TaskEither, of, tryCatch } from "fp-ts/lib/TaskEither.js";
 
-export type SearchArticleIds = (ids: ArticleIds) => Promise<ArticleIds>;
+export class SearchArticleIdsError extends Error {}
+
+export type SearchArticleIds = (
+  cond: ValidateSearchCondition
+) => Promise<ArticleIds>;
 
 export class ArticleIds {
   constructor(private _ids: ArticleId[]) {}
@@ -10,8 +14,14 @@ export class ArticleIds {
     return this._ids.map((id) => id.value);
   }
 
-  static search(search: SearchArticleIds, cond: ValidateSearchCondition): Task<ArticleIds> {
-    return of(new ArticleIds([]))
+  static search(
+    search: SearchArticleIds,
+    cond: ValidateSearchCondition
+  ): TaskEither<SearchArticleIdsError, ArticleIds> {
+    return tryCatch(
+      async () => await search(cond),
+      () => new SearchArticlesError("")
+    );
   }
 }
 
@@ -60,8 +70,14 @@ export class Articles {
     return this._articles;
   }
 
-  static findByIds(find: FindByIds, ids: ArticleIds): Task<Articles> {
-    return of(new Articles([]))
+  static findByIds(
+    find: FindByIds,
+    ids: ArticleIds
+  ): TaskEither<SearchArticlesError, Articles> {
+    return tryCatch(
+      async () => find(ids),
+      () => new SearchArticlesError("")
+    );
   }
 }
 
