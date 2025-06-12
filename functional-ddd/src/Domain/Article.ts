@@ -20,7 +20,7 @@ export class ArticleIds {
   ): TaskEither<SearchArticleIdsError, ArticleIds> {
     return tryCatch(
       async () => await search(cond),
-      () => new SearchArticlesError("")
+      () => new SearchArticlesError("IDの取得に失敗しました。")
     );
   }
 }
@@ -76,7 +76,7 @@ export class Articles {
   ): TaskEither<SearchArticlesError, Articles> {
     return tryCatch(
       async () => find(ids),
-      () => new SearchArticlesError("")
+      () => new SearchArticlesError("記事の取得に失敗しました。")
     );
   }
 }
