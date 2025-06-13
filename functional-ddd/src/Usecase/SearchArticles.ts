@@ -1,6 +1,7 @@
 import {
-  ArticleIds,
   Articles,
+  findByIds,
+  searchArticleIds,
   SearchArticleIdsError,
 } from "../Domain/Article.js";
 import type { ValidateSearchCondition } from "../Domain/SearchCondition.js";
@@ -23,7 +24,7 @@ export const search = (
 ): TaskEither<SearchArticlesError, Articles> =>
   pipe(
     cond,
-    (c) => ArticleIds.search(deps.searchArticleIds, c),
-    chain((ids) => Articles.findByIds(deps.findByIds, ids)),
+    (c) => searchArticleIds(deps.searchArticleIds, c),
+    chain((ids) => findByIds(deps.findByIds, ids)),
     mapLeft((e) => new SearchArticleIdsError(e.message))
   );

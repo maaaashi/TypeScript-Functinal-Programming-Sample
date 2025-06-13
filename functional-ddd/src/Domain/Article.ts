@@ -1,5 +1,5 @@
 import type { ValidateSearchCondition } from "./SearchCondition.js";
-import { type TaskEither, of, tryCatch } from "fp-ts/lib/TaskEither.js";
+import { type TaskEither, tryCatch } from "fp-ts/lib/TaskEither.js";
 
 export class SearchArticleIdsError extends Error {}
 
@@ -7,21 +7,21 @@ export type SearchArticleIds = (
   cond: ValidateSearchCondition
 ) => Promise<ArticleIds>;
 
+export const searchArticleIds = (
+  search: SearchArticleIds,
+  cond: ValidateSearchCondition
+): TaskEither<SearchArticleIdsError, ArticleIds> => {
+  return tryCatch(
+    async () => await search(cond),
+    () => new SearchArticlesError("IDの取得に失敗しました。")
+  );
+};
+
 export class ArticleIds {
   constructor(private _ids: ArticleId[]) {}
 
   get values(): string[] {
     return this._ids.map((id) => id.value);
-  }
-
-  static search(
-    search: SearchArticleIds,
-    cond: ValidateSearchCondition
-  ): TaskEither<SearchArticleIdsError, ArticleIds> {
-    return tryCatch(
-      async () => await search(cond),
-      () => new SearchArticlesError("IDの取得に失敗しました。")
-    );
   }
 }
 
@@ -63,21 +63,21 @@ export class Article {
 
 export type FindByIds = (ids: ArticleIds) => Promise<Articles>;
 
+export const findByIds = (
+  find: FindByIds,
+  ids: ArticleIds
+): TaskEither<SearchArticlesError, Articles> => {
+  return tryCatch(
+    async () => find(ids),
+    () => new SearchArticlesError("記事の取得に失敗しました。")
+  );
+};
+
 export class Articles {
   constructor(private readonly _articles: Article[]) {}
 
   get articles(): Article[] {
     return this._articles;
-  }
-
-  static findByIds(
-    find: FindByIds,
-    ids: ArticleIds
-  ): TaskEither<SearchArticlesError, Articles> {
-    return tryCatch(
-      async () => find(ids),
-      () => new SearchArticlesError("記事の取得に失敗しました。")
-    );
   }
 }
 
