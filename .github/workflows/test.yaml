@@ -22,11 +22,8 @@ jobs:
           node-version: "22"
           cache: "npm"
 
-      - name: change directory
-        run: cd ./functional-ddd
-
       - name: Install dependencies
-        run: npm ci
+        run: cd ./functional-ddd && npm ci
 
       - name: Run tests
-        run: npm run test
+        run: cd ./functional-ddd && npm test
