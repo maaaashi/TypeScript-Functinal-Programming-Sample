@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { ArticleId, ArticleIds, SearchArticleIdsError } from "./Article.js";
+import { ArticleId, ArticleIds, searchArticleIds } from "./Article.js";
 import { fold } from "fp-ts/lib/TaskEither.js";
 import { ValidateSearchCondition } from "./SearchCondition.js";
 
@@ -18,12 +18,12 @@ describe("Article", () => {
   describe("ArticleIds", () => {
     describe("search", () => {
       test("検索することができる", async () => {
-        const search = async (_: ValidateSearchCondition) => {
+        const s = async (_: ValidateSearchCondition) => {
           return new ArticleIds([new ArticleId("1"), new ArticleId("2")]);
         };
         const cond = ConditionMock.gen("query", 100, 10, "desc");
 
-        const result = ArticleIds.search(search, cond);
+        const result = searchArticleIds(s, cond);
 
         // fold(
         //   (error) => {
@@ -52,12 +52,12 @@ describe("Article", () => {
       });
 
       test("検索に失敗した時は特定のエラーを返す", () => {
-        const search = async (_: ValidateSearchCondition) => {
+        const s = async (_: ValidateSearchCondition) => {
           return new ArticleIds([new ArticleId("1"), new ArticleId("2")]);
         };
         const cond = ConditionMock.gen("query", 100, 10, "desc");
 
-        const result = ArticleIds.search(search, cond);
+        const result = searchArticleIds(s, cond);
 
         fold(
           (error) => {
