@@ -1,4 +1,4 @@
-name: Run Tests
+name: Run Functional DDD Tests
 
 on:
   push:
@@ -9,8 +9,11 @@ on:
       - main
 
 jobs:
-  test:
+  test_functional_ddd:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: functional-ddd/
 
     steps:
       - name: Checkout repository
@@ -21,9 +24,10 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
+          cache-dependency-path: functional-ddd/package-lock.json
 
       - name: Install dependencies
-        run: cd ./functional-ddd && npm ci
+        run: npm ci
 
       - name: Run tests
-        run: cd ./functional-ddd && npm test
+        run: npm run test
