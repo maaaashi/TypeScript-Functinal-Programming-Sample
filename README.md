@@ -1,3 +1,10 @@
+<a href="https://github.com/maaaashi/TypeScript-Functinal-Programming-Sample/actions/workflows/test.yaml" rel="nofollow">
+  <img src="https://github.com/maaaashi/TypeScript-Functinal-Programming-Sample/actions/workflows/test.yaml/badge.svg" alt="Gauge E2E Tests">
+</a>
+<a href="https://twitter.com/pg_maaaashi" rel="nofollow">
+  <img src="https://img.shields.io/badge/created%20by-@pg_maaaashi-4BBAAB.svg" alt="created by X@pg_maaaashi">
+</a>
+
 # TypeScript-Functinal-Programming-Sample
 
 このリポジトリは、同一のユースケースに対して 2 種類の設計アプローチを比較したサンプルコードです。
@@ -13,7 +20,10 @@ src/
 |   ├── compose.yaml    # Elasticsearch
 |   └── es_setup.sh     # es 初期化スクリプト
 ├── functional-ddd/     # 関数型 + ドメイン駆動設計
+|   └── package-lock.json
+├── es/
 ├── imperative/         # 命令型
+|   └── package-lock.json
 ├── README.md
 └── test.http
 ```
