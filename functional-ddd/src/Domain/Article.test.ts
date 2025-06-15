@@ -25,18 +25,6 @@ describe("Article", () => {
 
         const result = searchArticleIds(s, cond);
 
-        // fold(
-        //   (error) => {
-        //     throw error;
-        //   },
-        //   async (ids: ArticleIds) => {
-        //     const expected = new ArticleIds([
-        //       new ArticleId("1"),
-        //       new ArticleId("2"),
-        //     ]);
-        //     expect(ids).toStrictEqual(expected);
-        //   }
-        // )(result);
         fold(
           (error) => {
             throw error;
